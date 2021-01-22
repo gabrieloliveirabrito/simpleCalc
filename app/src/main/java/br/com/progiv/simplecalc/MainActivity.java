@@ -2,11 +2,13 @@ package br.com.progiv.simplecalc;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Application;
 import android.net.nsd.NsdManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -168,14 +170,59 @@ public class MainActivity extends AppCompatActivity {
                 }
                 exibirResultado();
                 Total = 0;
+            } 
+        });
+
+        btnSoma.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                operacao = "soma";
+                proximoNumero();
             }
         });
 
+        btnSub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                operacao = "sub";
+                proximoNumero();
+            }
+        });
+
+        btnMult.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                operacao = "mult";
+                proximoNumero();
+            }
+        });
+
+        btnDiv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                operacao = "div";
+                proximoNumero();
+            }
+        });
+
+        btnIgual.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                calcular();
+            }
+        });
+
+        btnLimp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                limpar();
+            }
+        });
     }
 
     //exibição em tela:
     private void exibirResultado(){
-        if(Total != 0 && Total < INVALID){
+        if(Result[1] != 0 || Total != 0 && Total < INVALID){
             //se o valor total for válido:
             String tela = String.valueOf(Total);
             RESULTSCREEN.setText(tela);
@@ -191,9 +238,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Passa o array para a próxima posição
-    private void proximoNumero(){
+    private void proximoNumero() {
         count = 0;
-        i = 1;
+
+        if (i == 0) {
+            i = 1;
+        } else {
+            calcular();
+        }
     }
 
     //Limpar a tela:
@@ -222,10 +274,14 @@ public class MainActivity extends AppCompatActivity {
                 Total = (Result[0] / Result[1]);
                 break;
         }
+
+        Toast.makeText(getApplicationContext(), "Exibindo resultado " + Integer.toString(Total), 3000);
         if(Total < INVALID){
             Result[0] = Total;
             Result[1] = 0;
             i = 1;
+
+            exibirResultado();
         }
     }
 
